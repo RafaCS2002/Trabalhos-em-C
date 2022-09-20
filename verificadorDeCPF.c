@@ -1,8 +1,8 @@
 #define cpfSize 14
 #include <stdio.h>
 
-int validation(char cpf[14]);
-void takeOutSpecial(char cpf[14]);
+int validation(char cpf[cpfSize]);
+void takeOutSpecial(char cpf[cpfSize]);
 char Digit01(char cpf[11]);
 char Digit02(char cpf[11],char digit01);
 
@@ -25,10 +25,10 @@ int main(){
       // printf("String: %s\n",cpf);
 
       digit01 = Digit01(cpf);
-      // printf("Digit01: %c\n",digit01);
+      printf("Digit01: %c\n",digit01);
 
       digit02 = Digit02(cpf,digit01);
-      // printf("Digit02: %c\n",digit02);
+      printf("Digit02: %c\n",digit02);
 
       if(cpf[cpfSize-5]==digit01 && cpf[cpfSize-4]==digit02){
          printf("O CPF inserido é Válido\n\nFechando o programa...\n\n");
@@ -64,7 +64,9 @@ int validation(char cpf[cpfSize]){
 void takeOutSpecial(char cpf[cpfSize]){
    for(int i=0;i<cpfSize;i++){
       if(cpf[i]==46 || cpf[i]==45){
-         for(int j=i;j<cpfSize;j++)cpf[j]=cpf[j+1];
+         for(int j=i;j<cpfSize;j++) {
+            cpf[j]=cpf[j+1];
+         }
       }
    }
 }
