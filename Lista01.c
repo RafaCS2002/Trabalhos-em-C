@@ -100,6 +100,7 @@ void ex02(){
    printf("Max: %d\n\n",max);
 }
 
+
 void ex03(){
    int nums03[999];
    int i = 0;
@@ -171,4 +172,5 @@ void ex06(){
 
    printf("S = %f\n",s);
 }
+
 

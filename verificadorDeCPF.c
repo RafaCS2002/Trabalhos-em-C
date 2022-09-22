@@ -7,7 +7,6 @@ char Digit01(char cpf[11]);
 char Digit02(char cpf[11],char digit01);
 
 int main(){
-   // 073.679.229-55
    char cpf[cpfSize]={NULL};
    char digit01,digit02;
    int loop=1;
