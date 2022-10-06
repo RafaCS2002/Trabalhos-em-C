@@ -8,18 +8,27 @@ void printCamp(char camp[n][n],int choice[n][n]);
 int main(){
    char camp[n][n];
    static int choice[n][n];
+   int iChoice, jChoice;
+   int loop = 1;
 
-   
 
    // inicializa camp com X em td
-   // for(int i=0;i<n;i++) for(int j=0;j<n;j++) camp[i][j] = 'X';
-   
-   //printa matriz
-   // for(int i=0;i<n;i++) for(int j=0;j<n;j++) if(j==n-1){printf("%c \n",camp[i][j]);}else{printf("%c ",camp[i][j]);}
-   // for(int i=0;i<n;i++) for(int j=0;j<n;j++) if(j==n-1){printf("%d \n",choice[i][j]);}else{printf("%d ",choice[i][j]);}
+   for(int i=0;i<n;i++) for(int j=0;j<n;j++) camp[i][j] = 'X';
 
-   printCamp(camp,choice);
+   while (loop){
+      
+      printCamp(camp,choice);
 
+      printf("\nEscolha uma Linha: ");
+      scanf("%d",&iChoice);
+      printf("Escolha uma Coluna: ");
+      scanf("%d",&jChoice);
+
+      choice[iChoice][jChoice] = 1;
+      //printa matriz
+      // for(int i=0;i<n;i++) for(int j=0;j<n;j++) if(j==n-1){printf("%c \n",camp[i][j]);}else{printf("%c ",camp[i][j]);}
+      // for(int i=0;i<n;i++) for(int j=0;j<n;j++) if(j==n-1){printf("%d \n",choice[i][j]);}else{printf("%d ",choice[i][j]);}
+   }
 }
 
 void printCamp(char camp[n][n],int choice[n][n]){
