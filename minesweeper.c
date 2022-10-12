@@ -6,17 +6,15 @@
 void printCamp(char camp[n][n],int choice[n][n]);
 void criaCamp(char camp[n][n],int choice[n][n]);
 void freePosi(char camp[n][n],int choice[n][n]);
-void checkWinLose(char camp[n][n],int choice[n][n]);
 
 int main(){
    char camp[n][n]; // Vai receber o Campo gerado
    static int choice[n][n]; // 0 - Não escolhido | 1 - Escolhido
    int iChoice, jChoice; // Escolha linha e coluna
-   int loop = 1;
-   int first = 1;
+   int loop = 1,first = 1,lose=0; // Variaveis de controle
 
 
-   // inicializa camp com '' em td
+   // inicializa camp com '.' em td
    for(int i=0;i<n;i++) for(int j=0;j<n;j++) camp[i][j] = '.';
 
    while (loop){
@@ -38,12 +36,27 @@ int main(){
 
       freePosi(camp,choice);
 
+      // Checa se perdeu
+      for(int i=0;i<n;i++){
+         for(int j=0;j<n;j++){
+            if(camp[i][j]=='X' && choice[i][j]){
+               lose = 1;
+               loop = 0;
+            }
+         }
+      }
+
       // printa matriz
       printf("\n\nCampo: \n");
       for(int i=0;i<n;i++) for(int j=0;j<n;j++) if(j==n-1){printf("%c \n",camp[i][j]);}else{printf("%c ",camp[i][j]);}
       printf("\n\nChoice:\n");
       for(int i=0;i<n;i++) for(int j=0;j<n;j++) if(j==n-1){printf("%d \n",choice[i][j]);}else{printf("%d ",choice[i][j]);}
    }
+
+   if(lose){
+      printf("\n\nVOCÊ PERDEU\n\n");
+   }
+
 }
 
 void printCamp(char camp[n][n],int choice[n][n]){
@@ -163,6 +176,3 @@ void freePosi(char camp[n][n],int choice[n][n]){
    }
 }
 
-void checkWinLose(char camp[n][n],int choice[n][n]){
-
-}
