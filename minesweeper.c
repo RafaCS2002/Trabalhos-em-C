@@ -159,15 +159,23 @@ void criaCamp(char camp[n][n],int choice[n][n]){
 }
 
 void freePosi(char camp[n][n],int choice[n][n]){
+   int aux;
+
    for(int i=0;i<n;i++){
       for(int j=0;j<n;j++){
          if(camp[i][j]=='.' && choice[i][j]){
             for(int k=-1;k<=1;k++){
                for(int l=-1;l<=1;l++){
                   if((i+k>=0 && i+k<n) && (j+l>=0 && j+l<n)){
-                     if(camp[i+k][j+l] == '.' || (camp[i+k][j+l]>=48 && camp[i+k][j+l]<58)){
+                     if((camp[i+k][j+l] == '.' || (camp[i+k][j+l]>=48 && camp[i+k][j+l]<58)) && (choice[i+k][j+l]==0)){
                         choice[i+k][j+l] = 1;
+                        aux = 1;
                      }
+                  }
+                  if((k==1 && l==1) && aux==1){
+                     i--;
+                     j--;
+                     aux=0;
                   }
                }
             }
