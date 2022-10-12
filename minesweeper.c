@@ -5,6 +5,8 @@
 
 void printCamp(char camp[n][n],int choice[n][n]);
 void criaCamp(char camp[n][n],int choice[n][n]);
+void freePosi(char camp[n][n],int choice[n][n]);
+void checkWinLose(char camp[n][n],int choice[n][n]);
 
 int main(){
    char camp[n][n]; // Vai receber o Campo gerado
@@ -34,9 +36,13 @@ int main(){
          first=0;
       }
 
-      //printa matriz
+      freePosi(camp,choice);
+
+      // printa matriz
+      printf("\n\nCampo: \n");
       for(int i=0;i<n;i++) for(int j=0;j<n;j++) if(j==n-1){printf("%c \n",camp[i][j]);}else{printf("%c ",camp[i][j]);}
-      // for(int i=0;i<n;i++) for(int j=0;j<n;j++) if(j==n-1){printf("%d \n",choice[i][j]);}else{printf("%d ",choice[i][j]);}
+      printf("\n\nChoice:\n");
+      for(int i=0;i<n;i++) for(int j=0;j<n;j++) if(j==n-1){printf("%d \n",choice[i][j]);}else{printf("%d ",choice[i][j]);}
    }
 }
 
@@ -119,15 +125,16 @@ void criaCamp(char camp[n][n],int choice[n][n]){
    }
 
    // Atribuir a quantidade de bombas ao redor
+   // 1 - Percorrer a matriz
    for(int i=0;i<n;i++){
       for(int j=0;j<n;j++){
-         if(camp[i][j]=='X'){
-            for(int k=-1;k<=1;k++){
+         if(camp[i][j]=='X'){ // 2 - Eh bomba? Fixa a posicao
+            for(int k=-1;k<=1;k++){ // 3 - Analisa o perimetro ao redor da bomba
                for(int l=-1;l<=1;l++){
-                  if((i+k>=0 && i+k<n) && (j+l>=0 && j+l<n)){
-                     if(camp[i+k][j+l] == '.'){
+                  if((i+k>=0 && i+k<n) && (j+l>=0 && j+l<n)){ // Evita lixo de memória
+                     if(camp[i+k][j+l] == '.'){ // 4 - Espaco vazio ao redor da bomba? Atribui 1
                         camp[i+k][j+l] = '1';
-                     }else if(camp[i+k][j+l] != 'X'){
+                     }else if(camp[i+k][j+l] != 'X'){ // 5 - Se ja tem num, num++
                         camp[i+k][j+l]+=1;
                      }
                   }
@@ -136,4 +143,26 @@ void criaCamp(char camp[n][n],int choice[n][n]){
          }
       }
    }
+}
+
+void freePosi(char camp[n][n],int choice[n][n]){
+   for(int i=0;i<n;i++){
+      for(int j=0;j<n;j++){
+         if(camp[i][j]=='.' && choice[i][j]){
+            for(int k=-1;k<=1;k++){
+               for(int l=-1;l<=1;l++){
+                  if((i+k>=0 && i+k<n) && (j+l>=0 && j+l<n)){
+                     if(camp[i+k][j+l] == '.' || (camp[i+k][j+l]>=48 && camp[i+k][j+l]<58)){
+                        choice[i+k][j+l] = 1;
+                     }
+                  }
+               }
+            }
+         }
+      }
+   }
+}
+
+void checkWinLose(char camp[n][n],int choice[n][n]){
+
 }
