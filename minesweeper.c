@@ -117,4 +117,23 @@ void criaCamp(char camp[n][n],int choice[n][n]){
          camp[bomb[0]][bomb[1]]='X';
       }
    }
+
+   // Atribuir a quantidade de bombas ao redor
+   for(int i=0;i<n;i++){
+      for(int j=0;j<n;j++){
+         if(camp[i][j]=='X'){
+            for(int k=-1;k<=1;k++){
+               for(int l=-1;l<=1;l++){
+                  if((i+k>=0 && i+k<n) && (j+l>=0 && j+l<n)){
+                     if(camp[i+k][j+l] == '.'){
+                        camp[i+k][j+l] = '1';
+                     }else if(camp[i+k][j+l] != 'X'){
+                        camp[i+k][j+l]+=1;
+                     }
+                  }
+               }
+            }
+         }
+      }
+   }
 }
