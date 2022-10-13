@@ -11,7 +11,7 @@ int main(){
    char camp[n][n]; // Vai receber o Campo gerado
    static int choice[n][n]; // 0 - Não escolhido | 1 - Escolhido
    int iChoice, jChoice; // Escolha linha e coluna
-   int loop = 1,first = 1,lose=0; // Variaveis de controle
+   int loop = 1,first = 1,lose=0,win=0,qntChoice=0,opt; // Variaveis de controle
 
 
    // inicializa camp com '.' em td
@@ -21,40 +21,100 @@ int main(){
       
       printCamp(camp,choice);
 
-      printf("\nEscolha uma Linha: ");
-      scanf("%d",&iChoice);
-      printf("Escolha uma Coluna: ");
-      scanf("%d",&jChoice);
+      while (loop){
+         printf("\n0 - Selecionar uma casa\n1 - Marcar Bomba\n2 - Desmarcar Bomba\nSelecionar: ");
+         scanf("%d",&opt);
 
-      choice[iChoice][jChoice] = 1;
+         switch (opt){
+         case 0: // Seleciona casa
+            printf("\nEscolha uma Linha: ");
+            scanf("%d",&iChoice);
+            printf("Escolha uma Coluna: ");
+            scanf("%d",&jChoice);
 
-      // Checa se é a primeira vez que está sendo escolhido
-      if (first){
-         criaCamp(camp,choice);
-         first=0;
+            if(choice[iChoice][jChoice] == 0){
+               choice[iChoice][jChoice] = 1;
+            }else{
+               printf("\nEsta casa não pode ser selecionada\n");
+            }
+
+            // Checa se é a primeira vez que está sendo escolhido
+            if (first){
+               criaCamp(camp,choice); // gera o campo
+               first=0;
+            }
+            
+            freePosi(camp,choice); // Libera os espaços ao redor
+            
+            loop = 0;
+            break;
+         case 1: // Marca Bomba
+            printf("\nEscolha uma Linha: ");
+            scanf("%d",&iChoice);
+            printf("Escolha uma Coluna: ");
+            scanf("%d",&jChoice);
+
+            if(choice[iChoice][jChoice] == 0){
+               choice[iChoice][jChoice] = 2;
+            }else{
+               printf("\nEsta casa não pode ser marcada\n");
+            }
+            
+            loop = 0;
+            break;
+         case 2: // Desmarca Bomba
+            printf("\nEscolha uma Linha: ");
+            scanf("%d",&iChoice);
+            printf("Escolha uma Coluna: ");
+            scanf("%d",&jChoice);
+
+            if(choice[iChoice][jChoice]==2){
+               choice[iChoice][jChoice] = 0;
+            }else{
+               printf("\nNão pode ser desmarcado\n");
+            }
+            
+            loop = 0;
+            break;
+         default:
+            printf("\nComando não reconhecido\n");
+            break;
+         }
       }
 
-      freePosi(camp,choice);
+      loop = 1;
 
-      // Checa se perdeu
+      // Perdeu ou ganhou?
+      qntChoice=0;
       for(int i=0;i<n;i++){
          for(int j=0;j<n;j++){
-            if(camp[i][j]=='X' && choice[i][j]){
+            if(camp[i][j]=='X' && choice[i][j]==1){ // Checa se perdeu
                lose = 1;
                loop = 0;
+            }
+            if(camp[i][j]!='X' && choice[i][j]==1){
+               qntChoice++;
+               if(qntChoice == ((n*n)-n)){
+                  win = 1;
+                  loop = 0;
+               }
             }
          }
       }
 
       // printa matriz
-      printf("\n\nCampo: \n");
-      for(int i=0;i<n;i++) for(int j=0;j<n;j++) if(j==n-1){printf("%c \n",camp[i][j]);}else{printf("%c ",camp[i][j]);}
-      printf("\n\nChoice:\n");
-      for(int i=0;i<n;i++) for(int j=0;j<n;j++) if(j==n-1){printf("%d \n",choice[i][j]);}else{printf("%d ",choice[i][j]);}
+      // printf("\n\nCampo: \n");
+      // for(int i=0;i<n;i++) for(int j=0;j<n;j++) if(j==n-1){printf("%c \n",camp[i][j]);}else{printf("%c ",camp[i][j]);}
+      // printf("\n\nChoice:\n");
+      // for(int i=0;i<n;i++) for(int j=0;j<n;j++) if(j==n-1){printf("%d \n",choice[i][j]);}else{printf("%d ",choice[i][j]);}
    }
 
    if(lose){
       printf("\n\nVOCÊ PERDEU\n\n");
+   }else if(win){
+      printf("\n\nVOCÊ GANHOU\n\n");
+   }else{
+      printf("\n\nERRO\n\n");
    }
 
 }
@@ -63,6 +123,7 @@ void printCamp(char camp[n][n],int choice[n][n]){
    char line[n+1];
    line[n] = '\n';
    
+   // Printa os indices das colunas
    printf(" ");
    for(int i=0;i<n;i++){
       printf("   %d",i);
@@ -72,8 +133,10 @@ void printCamp(char camp[n][n],int choice[n][n]){
    for(int i=0;i<n;i++){
       //Checar se há escolha
       for(int j=0;j<n;j++){
-         if(choice[i][j]){
+         if(choice[i][j] == 1){
             line[j] = camp[i][j];
+         }else if(choice[i][j]==2){
+            line[j] = '^';
          }else{
             line[j] = '-';
          }
@@ -96,7 +159,7 @@ void criaCamp(char camp[n][n],int choice[n][n]){
    // Recebe os indices da escolha
    for(int i=0;i<n;i++){
       for(int j=0;j<n;j++){
-         if (choice[i][j]){
+         if (choice[i][j] == 1){
             choiceIndex[0] = i;
             choiceIndex[1] = j;
          }
@@ -163,7 +226,7 @@ void freePosi(char camp[n][n],int choice[n][n]){
 
    for(int i=0;i<n;i++){
       for(int j=0;j<n;j++){
-         if(camp[i][j]=='.' && choice[i][j]){
+         if(camp[i][j]=='.' && choice[i][j] == 1){
             for(int k=-1;k<=1;k++){
                for(int l=-1;l<=1;l++){
                   if((i+k>=0 && i+k<n) && (j+l>=0 && j+l<n)){
